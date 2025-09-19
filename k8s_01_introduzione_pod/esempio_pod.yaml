@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: segreteria-1
+  namespace: scuola
+spec:
+  containers:
+    - name: webserver-gio
+      image: nginx:latest
+      ports:
+        - containerPort: 80

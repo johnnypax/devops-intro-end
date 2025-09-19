@@ -1,0 +1,20 @@
+apiVersion: apps/v1    # Versione usata da K-API
+kind: Deployment
+metadata:
+  name: scuola-deployment
+  namespace: scuola-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: scuola-pod
+  template:
+    metadata:
+      labels:
+        app: scuola-pod
+    spec:
+      containers:
+        - name: scuola-pod
+          image: nginx:latest
+          ports:
+            - containerPort: 80

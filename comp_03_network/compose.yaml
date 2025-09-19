@@ -1,0 +1,19 @@
+services:
+  api:
+    image: nginx:alpine
+    container_name: api
+    networks:
+      - giovanni_network
+
+  web:
+    image: curlimages/curl:8.9.1
+    container_name: web
+    command: ["sh", "-c", "sleep 10 && curl http://api:80"]
+    depends_on:
+      - api
+    networks:
+      - giovanni_network
+
+networks:
+  giovanni_network:
+    driver: bridge

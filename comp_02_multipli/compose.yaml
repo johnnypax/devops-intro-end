@@ -1,0 +1,28 @@
+services:
+  spring-1:
+    image: spring-profiles:1.2
+    container_name: spring-1
+    ports:
+      - "0:8081"
+    restart: always
+
+  spring-2:
+    image: spring-profiles:1.2
+    container_name: spring-2
+    ports:
+      - "0:8081"
+    restart: always
+      
+  spring-3:
+    image: spring-profiles:1.2
+    container_name: spring-3
+    ports:
+      - "0:8081"
+    restart: always
+    
+  spring-4:
+    image: spring-profiles:1.2
+    container_name: spring-4
+    ports:
+      - "0:8081"
+    restart: always

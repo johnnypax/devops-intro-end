@@ -1,0 +1,6 @@
+services:
+  spring-1:
+    image: spring-profiles:1.2
+    container_name: spring-1
+    ports:
+      - "0:8081"
