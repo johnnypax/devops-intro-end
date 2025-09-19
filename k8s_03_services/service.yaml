@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scuola-service
+  namespace: scuola-ns
+spec:
+  selector:
+    app: scuola-pod   #Etichetta dei pod del deployment
+  ports:
+    - port: 80        # Porta del service
+      targetPort: 80  # Porta del container
+      nodePort: 30100 # Porta esposta dal nodo
+  type: NodePort
+
+# Per esporre: minikube service <nome_servizio>
