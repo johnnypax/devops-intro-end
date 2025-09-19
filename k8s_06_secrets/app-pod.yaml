@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod
+  namespace: ferramenta-ns
+spec:
+  containers:
+    - name: demo-cli
+      image: busybox
+      command: ["sh", "-c", "echo User=$DB_USER && echo Password=$DB_PASS && sleep 3600"]
+      # Variabili d'ambiente
+      env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: USERNAME
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: PASSWORD

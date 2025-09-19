@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: universita-ns
+data:
+  APP_MESSAGE: "Ciao da Giovanni"
+  APP_MODE: "production"
+  APP_DEBUG: "true"
+  SPRING_PROFILES_ACTIVE: "dev"
+  SERVER_PORT: "8081"
