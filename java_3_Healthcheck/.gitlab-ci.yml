@@ -1,0 +1,69 @@
+stages:
+  - build
+  - test
+  - package
+  - docker-build
+
+build:
+  stage: build
+  image: maven:3.9.11-eclipse-temurin-17
+  script:
+    - mvn -B -DskipTests clean compile
+  artifacts:
+    expire_in: "1 days"
+    paths:
+      - target/
+      - .m2/repository
+
+test:
+  stage: test
+  image: maven:3.9.11-eclipse-temurin-17
+  needs: ["build"]
+  script:
+    - mvn -B test
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/*.xml
+    paths:
+      - target/site/jacoco/index.html
+      - target/jacoco.exec
+
+package:
+  stage: package
+  image: maven:3.9.11-eclipse-temurin-17
+  needs: ["test"]
+  script:
+    - mvn -B -DskipTests package
+  artifacts:
+    expire_in: "1 days"
+    paths:
+      - target/*.jar
+
+
+docker-build:
+  stage: docker
+  image: docker:26
+  services:
+    - name: docker:26-dind
+      command: ["--tls=false"]
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  needs: ["package"]
+  script:
+    - echo "Login al registry"
+    - >
+      if [ -n "$CI_REGISTRY_USER" ]; then
+        echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+      else
+        echo "$CI_JOB_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+      fi
+    - IMAGE_TAG="${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
+    - LATEST_TAG="${CI_REGISTRY_IMAGE}:latest"
+    - docker build -t "$IMAGE_TAG" -t "$LATEST_TAG" .
+    - docker push "$IMAGE_TAG"
+    - docker push "$LATEST_TAG"
+  rules:
+    - if: $CI_COMMIT_BRANCH
