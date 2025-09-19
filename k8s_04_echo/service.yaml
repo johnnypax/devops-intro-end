@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo-service
+  namespace: echo-ns
+spec:
+  selector:
+    app: echo   #Etichetta dei pod del deployment
+  ports:
+    - port: 80        # Porta del service
+      targetPort: 80  # Porta del container
+      nodePort: 30101 # Porta esposta dal nodo
+  type: NodePort
+
+# Per esporre: minikube service <nome_servizio>
