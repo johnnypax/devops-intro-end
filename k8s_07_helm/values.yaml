@@ -1,0 +1,11 @@
+replicaCount: 1
+
+# nginxdemos/hello
+
+image:
+  repository: k8s.gcr.io/echoserver
+  tag: "1.10"
+
+service:
+  type: NodePort
+  port: 8080
